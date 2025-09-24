@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, BarChart3, Home } from "lucide-react";
+import { BarChart3, Home } from "lucide-react";
 
 interface NavigationProps {
   currentPage?: "home" | "dashboard";
@@ -18,8 +19,14 @@ export function Navigation({ currentPage = "home" }: NavigationProps) {
             href="/"
             className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
           >
-            <div className="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <MessageSquare className="h-5 w-5 text-white" />
+            <div className="h-10 w-10 relative">
+              <Image
+                src="/logo.png"
+                alt="Feedback System Logo"
+                fill
+                className="object-contain"
+                priority
+              />
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900">

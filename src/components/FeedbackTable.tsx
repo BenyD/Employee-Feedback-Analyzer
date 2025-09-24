@@ -35,6 +35,19 @@ interface FeedbackItem {
   sentimentScore: number;
   sentimentLabel: string;
   confidenceScore: number;
+  sentimentIntensity: string;
+  workEnvironmentSentiment: number;
+  workEnvironmentSentimentLabel: string;
+  workEnvironmentIntensity: string;
+  managementSentiment: number;
+  managementSentimentLabel: string;
+  managementIntensity: string;
+  compensationSentiment: number;
+  compensationSentimentLabel: string;
+  compensationIntensity: string;
+  growthOpportunitiesSentiment: number;
+  growthOpportunitiesSentimentLabel: string;
+  growthOpportunitiesIntensity: string;
   submittedAt: string;
 }
 
@@ -213,9 +226,10 @@ export function FeedbackTable() {
                     </TableCell>
                     <TableCell>
                       <Button
-                        variant="ghost"
+                        variant="outline"
                         size="sm"
                         onClick={() => toggleRowExpansion(item.id)}
+                        className="hover:bg-blue-50 hover:border-blue-300"
                       >
                         {expandedRows.has(item.id)
                           ? "Hide Details"
@@ -285,7 +299,7 @@ export function FeedbackTable() {
                             <label className="text-sm font-medium text-gray-600">
                               Comments
                             </label>
-                            <p className="text-sm text-gray-800 mt-1 p-3 bg-white rounded border">
+                            <p className="text-sm text-gray-800 mt-1 p-3 bg-white rounded border max-w-full break-words whitespace-pre-wrap">
                               {item.comments || "No comments provided"}
                             </p>
                           </div>
@@ -294,22 +308,194 @@ export function FeedbackTable() {
                               <label className="text-sm font-medium text-gray-600">
                                 Suggestions
                               </label>
-                              <p className="text-sm text-gray-800 mt-1 p-3 bg-white rounded border">
+                              <p className="text-sm text-gray-800 mt-1 p-3 bg-white rounded border max-w-full break-words whitespace-pre-wrap">
                                 {item.suggestions}
                               </p>
                             </div>
                           )}
-                          <div className="flex justify-between text-xs text-gray-500">
-                            <span>
-                              Sentiment Score:{" "}
-                              {item.sentimentScore?.toFixed(2) || "N/A"}
-                            </span>
-                            <span>
-                              Confidence:{" "}
-                              {(item.confidenceScore * 100)?.toFixed(1) ||
-                                "N/A"}
-                              %
-                            </span>
+                          {/* Enhanced Sentiment Analysis */}
+                          <div className="border-t pt-4">
+                            <h4 className="text-sm font-semibold text-gray-700 mb-3">
+                              Enhanced Sentiment Analysis
+                            </h4>
+
+                            {/* Overall Sentiment */}
+                            <div className="mb-4">
+                              <div className="flex justify-between items-center mb-2">
+                                <span className="text-sm font-medium text-gray-600">
+                                  Overall Sentiment
+                                </span>
+                                <div className="flex items-center space-x-2">
+                                  <Badge
+                                    className={`text-xs ${getSentimentColor(
+                                      item.sentimentLabel
+                                    )}`}
+                                  >
+                                    {item.sentimentLabel
+                                      .charAt(0)
+                                      .toUpperCase() +
+                                      item.sentimentLabel.slice(1)}
+                                  </Badge>
+                                  <Badge variant="outline" className="text-xs">
+                                    {item.sentimentIntensity || "N/A"}
+                                  </Badge>
+                                </div>
+                              </div>
+                              <div className="flex justify-between text-xs text-gray-500">
+                                <span>
+                                  Score:{" "}
+                                  {item.sentimentScore?.toFixed(2) || "N/A"}
+                                </span>
+                                <span>
+                                  Confidence:{" "}
+                                  {(item.confidenceScore * 100)?.toFixed(1) ||
+                                    "N/A"}
+                                  %
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Aspect-based Sentiment */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="space-y-3">
+                                <div className="p-3 bg-white rounded border">
+                                  <div className="flex justify-between items-center mb-1">
+                                    <span className="text-sm font-medium text-gray-600">
+                                      Work Environment
+                                    </span>
+                                    <div className="flex items-center space-x-1">
+                                      <Badge
+                                        className={`text-xs ${getSentimentColor(
+                                          item.workEnvironmentSentimentLabel
+                                        )}`}
+                                      >
+                                        {item.workEnvironmentSentimentLabel
+                                          ?.charAt(0)
+                                          .toUpperCase() +
+                                          item.workEnvironmentSentimentLabel?.slice(
+                                            1
+                                          ) || "N/A"}
+                                      </Badge>
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs"
+                                      >
+                                        {item.workEnvironmentIntensity || "N/A"}
+                                      </Badge>
+                                    </div>
+                                  </div>
+                                  <div className="text-xs text-gray-500">
+                                    Score:{" "}
+                                    {item.workEnvironmentSentiment?.toFixed(
+                                      2
+                                    ) || "N/A"}
+                                  </div>
+                                </div>
+
+                                <div className="p-3 bg-white rounded border">
+                                  <div className="flex justify-between items-center mb-1">
+                                    <span className="text-sm font-medium text-gray-600">
+                                      Management
+                                    </span>
+                                    <div className="flex items-center space-x-1">
+                                      <Badge
+                                        className={`text-xs ${getSentimentColor(
+                                          item.managementSentimentLabel
+                                        )}`}
+                                      >
+                                        {item.managementSentimentLabel
+                                          ?.charAt(0)
+                                          .toUpperCase() +
+                                          item.managementSentimentLabel?.slice(
+                                            1
+                                          ) || "N/A"}
+                                      </Badge>
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs"
+                                      >
+                                        {item.managementIntensity || "N/A"}
+                                      </Badge>
+                                    </div>
+                                  </div>
+                                  <div className="text-xs text-gray-500">
+                                    Score:{" "}
+                                    {item.managementSentiment?.toFixed(2) ||
+                                      "N/A"}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="space-y-3">
+                                <div className="p-3 bg-white rounded border">
+                                  <div className="flex justify-between items-center mb-1">
+                                    <span className="text-sm font-medium text-gray-600">
+                                      Compensation
+                                    </span>
+                                    <div className="flex items-center space-x-1">
+                                      <Badge
+                                        className={`text-xs ${getSentimentColor(
+                                          item.compensationSentimentLabel
+                                        )}`}
+                                      >
+                                        {item.compensationSentimentLabel
+                                          ?.charAt(0)
+                                          .toUpperCase() +
+                                          item.compensationSentimentLabel?.slice(
+                                            1
+                                          ) || "N/A"}
+                                      </Badge>
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs"
+                                      >
+                                        {item.compensationIntensity || "N/A"}
+                                      </Badge>
+                                    </div>
+                                  </div>
+                                  <div className="text-xs text-gray-500">
+                                    Score:{" "}
+                                    {item.compensationSentiment?.toFixed(2) ||
+                                      "N/A"}
+                                  </div>
+                                </div>
+
+                                <div className="p-3 bg-white rounded border">
+                                  <div className="flex justify-between items-center mb-1">
+                                    <span className="text-sm font-medium text-gray-600">
+                                      Growth Opportunities
+                                    </span>
+                                    <div className="flex items-center space-x-1">
+                                      <Badge
+                                        className={`text-xs ${getSentimentColor(
+                                          item.growthOpportunitiesSentimentLabel
+                                        )}`}
+                                      >
+                                        {item.growthOpportunitiesSentimentLabel
+                                          ?.charAt(0)
+                                          .toUpperCase() +
+                                          item.growthOpportunitiesSentimentLabel?.slice(
+                                            1
+                                          ) || "N/A"}
+                                      </Badge>
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs"
+                                      >
+                                        {item.growthOpportunitiesIntensity ||
+                                          "N/A"}
+                                      </Badge>
+                                    </div>
+                                  </div>
+                                  <div className="text-xs text-gray-500">
+                                    Score:{" "}
+                                    {item.growthOpportunitiesSentiment?.toFixed(
+                                      2
+                                    ) || "N/A"}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </TableCell>

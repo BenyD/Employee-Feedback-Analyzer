@@ -25,88 +25,6 @@ function encryptText(text: string): string {
   return text;
 }
 
-async function analyzeSentiment(text: string): Promise<{
-  sentiment_score: number;
-  sentiment_label: string;
-  confidence_score: number;
-}> {
-  const apiKey = process.env.HF_TOKEN || process.env.HUGGINGFACE_API_KEY;
-  if (!apiKey) {
-    // Fallback for demo - return neutral sentiment
-    return {
-      sentiment_score: 0.0,
-      sentiment_label: "neutral",
-      confidence_score: 0.5,
-    };
-  }
-
-  try {
-    const response = await fetch(
-      "https://router.huggingface.co/hf-inference/models/cardiffnlp/twitter-roberta-base-sentiment-latest",
-      {
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({ inputs: text }),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`HF API error: ${response.status}`);
-    }
-
-    const result = await response.json();
-
-    // Handle both single and batch responses
-    const analysis = Array.isArray(result) ? result[0] : result;
-
-    if (Array.isArray(analysis)) {
-      // Find the highest confidence prediction
-      const best = analysis.reduce((prev, current) =>
-        prev.score > current.score ? prev : current
-      );
-
-      // Convert labels to our format
-      let sentiment_label = "neutral";
-      let sentiment_score = 0.0;
-
-      if (best.label === "positive") {
-        sentiment_label = "positive";
-        sentiment_score = best.score;
-      } else if (best.label === "negative") {
-        sentiment_label = "negative";
-        sentiment_score = -best.score;
-      } else {
-        // Neutral
-        sentiment_label = "neutral";
-        sentiment_score = 0.0;
-      }
-
-      return {
-        sentiment_score,
-        sentiment_label,
-        confidence_score: best.score,
-      };
-    }
-
-    // Fallback
-    return {
-      sentiment_score: 0.0,
-      sentiment_label: "neutral",
-      confidence_score: 0.5,
-    };
-  } catch (error) {
-    console.error("Sentiment analysis error:", error);
-    return {
-      sentiment_score: 0.0,
-      sentiment_label: "neutral",
-      confidence_score: 0.5,
-    };
-  }
-}
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -132,11 +50,26 @@ export async function POST(request: NextRequest) {
       ? encryptText(validatedData.suggestions)
       : null;
 
-    // Analyze sentiment
+    // Analyze sentiment with enhanced features
     const combinedText = `${validatedData.comments} ${
       validatedData.suggestions || ""
     }`;
-    const sentimentAnalysis = await analyzeSentiment(combinedText);
+
+    // Call the enhanced sentiment analysis API
+    const sentimentResponse = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+      }/api/analyze-sentiment`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: combinedText }),
+      }
+    );
+
+    const sentimentAnalysis = await sentimentResponse.json();
 
     // Insert feedback into database
     const { data, error } = await supabaseAdmin
@@ -157,6 +90,32 @@ export async function POST(request: NextRequest) {
         contains_pii: containsPII,
         sentiment_score: sentimentAnalysis.sentiment_score,
         sentiment_label: sentimentAnalysis.sentiment_label,
+        confidence_score: sentimentAnalysis.confidence_score,
+        sentiment_intensity: sentimentAnalysis.sentiment_intensity,
+        work_environment_sentiment:
+          sentimentAnalysis.aspect_sentiments.work_environment.score,
+        work_environment_sentiment_label:
+          sentimentAnalysis.aspect_sentiments.work_environment.label,
+        work_environment_intensity:
+          sentimentAnalysis.aspect_sentiments.work_environment.intensity,
+        management_sentiment:
+          sentimentAnalysis.aspect_sentiments.management.score,
+        management_sentiment_label:
+          sentimentAnalysis.aspect_sentiments.management.label,
+        management_intensity:
+          sentimentAnalysis.aspect_sentiments.management.intensity,
+        compensation_sentiment:
+          sentimentAnalysis.aspect_sentiments.compensation.score,
+        compensation_sentiment_label:
+          sentimentAnalysis.aspect_sentiments.compensation.label,
+        compensation_intensity:
+          sentimentAnalysis.aspect_sentiments.compensation.intensity,
+        growth_opportunities_sentiment:
+          sentimentAnalysis.aspect_sentiments.growth_opportunities.score,
+        growth_opportunities_sentiment_label:
+          sentimentAnalysis.aspect_sentiments.growth_opportunities.label,
+        growth_opportunities_intensity:
+          sentimentAnalysis.aspect_sentiments.growth_opportunities.intensity,
         ip_hash: "hashed_ip_" + Math.random().toString(36).substr(2, 9),
         user_agent_hash: "hashed_ua_" + Math.random().toString(36).substr(2, 9),
       })

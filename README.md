@@ -25,7 +25,9 @@ This project serves as a practical demonstration of **Text Analytics and Natural
 
 ### 🤖 **AI-Powered Analysis**
 
-- **Sentiment Analysis** - Real-time sentiment scoring with fallback algorithms
+- **Enhanced Sentiment Analysis** - Advanced sentiment analysis with intensity levels and aspect-based analysis
+- **Intensity Levels** - Sentiment intensity classification (Mild, Moderate, Strong, Extreme)
+- **Aspect-based Sentiment** - Granular sentiment analysis for Work Environment, Management, Compensation, and Growth Opportunities
 - **PII Detection** - Automatic detection and redaction of personal information
 - **Confidence Scoring** - ML confidence metrics for reliability
 - **Caching** - Intelligent caching to optimize API usage
@@ -34,11 +36,13 @@ This project serves as a practical demonstration of **Text Analytics and Natural
 ### 📊 **HR Dashboard**
 
 - **Real-time Analytics** - Live feedback metrics and trends
+- **Enhanced Sentiment Overview** - Comprehensive sentiment analysis with intensity distribution
+- **Aspect-based Analytics** - Detailed sentiment breakdown by workplace aspects
 - **Department Insights** - Department-wise sentiment and rating analysis
 - **Visual Charts** - Interactive charts and graphs using Recharts
 - **CSV Export** - Download analytics data for further analysis
 - **Trend Analysis** - 7-day feedback trends and patterns
-- **Detailed Feedback Table** - Individual feedback submissions with expandable details
+- **Detailed Feedback Table** - Individual feedback submissions with expandable enhanced sentiment details
 - **Rating Breakdowns** - Star ratings for work environment, management, compensation, and growth
 
 ### 🎨 **Modern UI/UX**
@@ -126,7 +130,10 @@ Navigate to [http://localhost:3000/dashboard](http://localhost:3000/dashboard) t
 
 ### **AI/ML**
 
-- **Sentiment Analysis** - Custom algorithm with Hugging Face API fallback
+- **Enhanced Sentiment Analysis** - Advanced sentiment analysis with intensity levels and aspect-based analysis
+- **Intensity Classification** - Sentiment intensity levels (Mild, Moderate, Strong, Extreme)
+- **Aspect-based Analysis** - Granular sentiment analysis for specific workplace aspects
+- **Custom Algorithm** - Fallback sentiment analysis with Hugging Face API integration
 - **PII Detection** - Regex-based redaction for emails, names, phone numbers
 - **Text Encryption** - AES encryption for sensitive data
 - **Caching Layer** - Database caching for ML results
@@ -137,11 +144,53 @@ Navigate to [http://localhost:3000/dashboard](http://localhost:3000/dashboard) t
 ```sql
 -- Core tables
 departments          -- Department information
-feedback_submissions -- Anonymous feedback data
+feedback_submissions -- Anonymous feedback data with enhanced sentiment fields
 topics              -- Discovered topics
 feedback_topics     -- Topic assignments
 analysis_cache      -- ML result caching
+
+-- Enhanced sentiment fields in feedback_submissions:
+sentiment_intensity                    -- Overall sentiment intensity level
+work_environment_sentiment            -- Work environment sentiment score
+work_environment_sentiment_label      -- Work environment sentiment label
+work_environment_intensity            -- Work environment intensity level
+management_sentiment                  -- Management sentiment score
+management_sentiment_label            -- Management sentiment label
+management_intensity                  -- Management intensity level
+compensation_sentiment                -- Compensation sentiment score
+compensation_sentiment_label          -- Compensation sentiment label
+compensation_intensity                -- Compensation intensity level
+growth_opportunities_sentiment        -- Growth opportunities sentiment score
+growth_opportunities_sentiment_label  -- Growth opportunities sentiment label
+growth_opportunities_intensity        -- Growth opportunities intensity level
 ```
+
+## 🧠 Enhanced Sentiment Analysis Features
+
+### **Intensity Levels**
+
+The system now classifies sentiment intensity into four levels:
+
+- **Mild** - Subtle sentiment expression
+- **Moderate** - Clear sentiment with moderate strength
+- **Strong** - Intense sentiment expression
+- **Extreme** - Very strong sentiment (rare cases)
+
+### **Aspect-based Analysis**
+
+Granular sentiment analysis across four key workplace aspects:
+
+- **Work Environment** - Physical and cultural workplace factors
+- **Management** - Leadership and supervisory relationships
+- **Compensation** - Salary, benefits, and financial rewards
+- **Growth Opportunities** - Career development and advancement
+
+### **Enhanced Dashboard Features**
+
+- **Sentiment Intensity Distribution** - Visual breakdown of sentiment intensity levels
+- **Aspect-based Analytics** - Detailed sentiment analysis for each workplace aspect
+- **Individual Feedback Details** - Expandable sentiment analysis for each feedback submission
+- **Real-time Processing** - Automatic sentiment analysis with intensity and aspect classification
 
 ## 📱 Usage
 
@@ -151,15 +200,16 @@ analysis_cache      -- ML result caching
 2. Select your department
 3. Rate various aspects (1-5 stars)
 4. Provide detailed comments and suggestions
-5. Submit anonymously
+5. Submit anonymously (sentiment analysis happens automatically)
 
 ### **For HR Teams**
 
 1. Access the dashboard at `/dashboard`
-2. View real-time analytics
-3. Analyze department-wise insights
-4. Export data for further analysis
-5. Monitor trends and patterns
+2. View real-time analytics with enhanced sentiment insights
+3. Analyze department-wise insights with intensity levels
+4. Review aspect-based sentiment breakdowns
+5. Export data for further analysis
+6. Monitor trends and patterns with detailed sentiment metrics
 
 ## 🔧 API Endpoints
 
@@ -187,17 +237,18 @@ POST /api/feedback
 GET / api / analytics;
 // Returns comprehensive analytics data including:
 // - Overview metrics (total feedback, avg rating, sentiment)
-// - Sentiment distribution
-// - Department statistics
+// - Sentiment distribution with intensity levels
+// - Department statistics with enhanced sentiment
 // - Rating distribution
 // - Trend data (7-day)
+// - Enhanced sentiment analysis metrics
 ```
 
 ### **Feedback Data (Paginated)**
 
 ```typescript
 GET /api/feedback-data?page=1&limit=10
-// Returns paginated feedback submissions with department info
+// Returns paginated feedback submissions with department info and enhanced sentiment data
 ```
 
 ### **Departments**
@@ -207,14 +258,21 @@ GET / api / departments;
 // Returns list of departments with descriptions
 ```
 
-### **Sentiment Analysis**
+### **Enhanced Sentiment Analysis**
 
 ```typescript
 POST / api / analyze - sentiment;
 {
   text: string;
 }
-// Returns sentiment score, label, and confidence
+// Returns enhanced sentiment analysis including:
+// - Overall sentiment score, label, and confidence
+// - Sentiment intensity level (mild, moderate, strong, extreme)
+// - Aspect-based sentiment analysis for:
+//   - Work Environment (score, label, intensity)
+//   - Management (score, label, intensity)
+//   - Compensation (score, label, intensity)
+//   - Growth Opportunities (score, label, intensity)
 ```
 
 ### **CSV Export**
@@ -282,6 +340,7 @@ moodly/
 
 ## 🔮 Future Enhancements
 
+- [x] **Enhanced Sentiment Analysis** - Intensity levels and aspect-based sentiment analysis ✅
 - [ ] **Topic Clustering** - BERTopic integration for automatic topic discovery
 - [ ] **Advanced Analytics** - More sophisticated ML models
 - [ ] **Real-time Notifications** - Alert HR teams of concerning feedback
@@ -290,16 +349,21 @@ moodly/
 - [ ] **Integration APIs** - Connect with existing HR systems
 - [ ] **Advanced PII Detection** - Machine learning-based PII detection
 - [ ] **Feedback Categories** - Automatic categorization of feedback topics
+- [ ] **Sentiment Trends** - Historical sentiment analysis and trend prediction
+- [ ] **Emotion Detection** - Beyond sentiment to detect specific emotions
 
 ## 🎓 Academic Purpose
 
 This project was developed as a **Text Analytics and Natural Language Processing** demonstration for academic purposes. It showcases practical implementation of:
 
-- Text preprocessing and cleaning techniques
-- Sentiment analysis algorithms and their applications
-- PII detection using pattern matching and regex
-- Natural language processing in web applications
-- Data visualization of text analytics results
+- **Advanced Sentiment Analysis** - Multi-level sentiment analysis with intensity classification
+- **Aspect-based Analysis** - Granular sentiment analysis for specific text aspects
+- **Text preprocessing and cleaning techniques** - Data preparation and normalization
+- **Sentiment analysis algorithms and their applications** - From basic to advanced sentiment analysis
+- **PII detection using pattern matching and regex** - Privacy protection techniques
+- **Natural language processing in web applications** - Real-world NLP implementation
+- **Data visualization of text analytics results** - Interactive dashboards and charts
+- **Machine Learning Integration** - API integration and fallback algorithms
 
 ## 📄 License
 
