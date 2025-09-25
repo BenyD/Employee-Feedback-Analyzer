@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://moodly-demo.vercel.app";
+  const baseUrl = "https://employee-feedback-analyzer-demo.vercel.app";
 
   return [
     {

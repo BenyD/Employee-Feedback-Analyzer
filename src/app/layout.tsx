@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://moodly-demo.vercel.app",
+    url: "https://employee-feedback-analyzer-demo.vercel.app",
     title: "Employee Feedback Analyzer - Text Analytics Demo",
     description:
       "A comprehensive demonstration of Text Analytics and Natural Language Processing techniques in employee feedback analysis.",

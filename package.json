@@ -21,7 +21,7 @@
     "type": "git",
     "url": "https://github.com/benydishon/employee-feedback-analyzer.git"
   },
-  "homepage": "https://moodly-demo.vercel.app",
+  "homepage": "https://employee-feedback-analyzer-demo.vercel.app",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",

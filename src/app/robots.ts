@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: "/api/",
     },
-    sitemap: "https://moodly-demo.vercel.app/sitemap.xml",
+    sitemap: "https://employee-feedback-analyzer-demo.vercel.app/sitemap.xml",
   };
 }

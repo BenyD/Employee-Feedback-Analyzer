@@ -64,8 +64,8 @@ This project serves as a practical demonstration of **Text Analytics and Natural
 ### 1. Clone and Install
 
 ```bash
-git clone https://github.com/yourusername/moodly.git
-cd moodly
+git clone https://github.com/yourusername/employee-feedback-analyzer.git
+cd employee-feedback-analyzer
 npm install
 ```
 
@@ -307,7 +307,7 @@ GET /api/export-csv
 ## 📁 Project Structure
 
 ```
-moodly/
+employee-feedback-analyzer/
 ├── src/
 │   ├── app/                    # Next.js App Router
 │   │   ├── api/               # API routes
